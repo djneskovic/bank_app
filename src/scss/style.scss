@@ -1,11 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
+
+@import "./includes/variables-and-mixins";
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 }
 
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	min-height: 100vh;
-
-	background: linear-gradient(to right, rgb(31, 64, 55), rgb(153, 242, 200));
+	background: $lightgreen;
+	color: $black;
+	font-family: "Montserrat", sans-serif;
+	// font-family: "Dancing Script", cursive;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
+
+.container {
+	max-width: 1300px;
+	margin: 0 auto;
+	padding: 0 2rem;
+}
+
+img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.btn {
+	background: $green;
+	padding: 0.7rem 1.3rem;
+	color: $white;
+	border-radius: 10px;
+
+	&:hover {
+		background: #8c968b;
+	}
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	appearance: none;
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type="number"] {
+	appearance: none;
+	-moz-appearance: textfield;
+}
+
+@import "./components/sign-up";
+
+@import "./views/login-view";

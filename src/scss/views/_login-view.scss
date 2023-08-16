@@ -1,0 +1,70 @@
+.login {
+	background: #fff;
+	box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+		rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+
+	padding: 0 2rem 3rem;
+	border-radius: 20px;
+
+	&-logo {
+		width: 150px;
+		height: 150px;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	input {
+		width: 100%;
+		margin-bottom: 1rem;
+		font-size: 20px;
+		border: 1px solid $grey;
+		border-radius: 10px;
+		padding: 0.3rem;
+		color: $grey;
+
+		&:focus {
+			outline: none;
+		}
+	}
+
+	.btn-signIn {
+		margin-top: 1rem;
+	}
+
+	.signInError {
+		font-size: 0.9rem;
+		margin: 1rem 0 0.3rem;
+		text-align: start;
+		align-self: flex-start;
+		color: $grey;
+	}
+
+	.or {
+		color: $grey;
+		margin: 0.8rem 0;
+		position: relative;
+		padding: 0 20px;
+
+		&::before,
+		&::after {
+			content: "";
+			position: absolute;
+			top: 50%;
+			width: 150%; /* Adjust the width of the lines */
+			height: 1px; /* Adjust the height of the lines */
+			background-color: $grey; /* Adjust the color of the lines */
+		}
+
+		&::before {
+			left: 100%;
+		}
+
+		&::after {
+			right: 100%; // transform: translateY(-50%);
+		}
+	}
+}

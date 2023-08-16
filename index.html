@@ -8,7 +8,35 @@
 			content="width=device-width, initial-scale=1.0"
 		/>
 		<link rel="stylesheet" href="./public/css/style.css" />
-		<title>Vite App</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+		/>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							white: "#fff",
+							green: "#727d71",
+							lightgreen: "#abc4ad",
+							grey: "#4d4d4d",
+							black: "#212121",
+						},
+
+						screens: {
+							smApple: "420px",
+							sm: "481px",
+							md: "780px",
+							lg: "1024px",
+							xl: "1280px",
+						},
+					},
+				},
+			};
+		</script>
+		<title>Bank App</title>
 	</head>
 	<body>
 		<div id="app"></div>

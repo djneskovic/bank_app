@@ -1,0 +1,45 @@
+$screen-sm-apple-min: 420px;
+$screen-sm-min: 481px;
+$screen-md-min: 780px;
+$screen-lg-min: 1024px;
+$screen-xl-min: 1280px;
+
+//* Mixins
+
+@mixin screen-sm-apple {
+	@media screen and (min-width: #{$screen-sm-apple-min}) {
+		@content;
+	}
+}
+
+@mixin screen-sm {
+	@media screen and (min-width: #{$screen-sm-min}) {
+		@content;
+	}
+}
+@mixin screen-md {
+	@media screen and (min-width: #{$screen-md-min}) {
+		@content;
+	}
+}
+@mixin screen-lg {
+	@media screen and (min-width: #{$screen-lg-min}) {
+		@content;
+	}
+}
+
+@mixin screen-xl {
+	@media screen and (min-width: #{$screen-xl-min}) {
+		@content;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+//* Colors
+
+$lightgreen: #abc4ad;
+$green: #727d71;
+$white: #fff;
+$grey: #4d4d4d;
+$black: #212121;
