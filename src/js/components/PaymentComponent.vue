@@ -22,8 +22,8 @@
 			<div
 				class="transfer-inputs md:flex md:items-center md:justify-center md:gap-4"
 			>
-				<input type="text" placeholder="Enter your email" />
-				<input type="password" placeholder="Enter your password" />
+				<input type="text" placeholder="Enter email" />
+				<input type="password" placeholder="Enter password" />
 			</div>
 			<button class="btn">Loan</button>
 		</div>
