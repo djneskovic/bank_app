@@ -60,5 +60,7 @@ input[type="number"] {
 }
 
 @import "./components/sign-up";
+@import "./components/payment-component";
 
 @import "./views/login-view";
+@import "./views/user-view";

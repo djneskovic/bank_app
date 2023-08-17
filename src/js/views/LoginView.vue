@@ -3,7 +3,7 @@
 		<div class="container">
 			<div class="login flex flex-col items-center justify-center">
 				<div class="login-logo">
-					<img src="/images/logo.png" alt="" />
+					<img src="/images/logo2.png" alt="" />
 				</div>
 				<div class="inputs">
 					<input

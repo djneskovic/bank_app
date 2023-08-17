@@ -134,9 +134,16 @@ export const useAuthStore = defineStore("authStore", {
 								},
 							});
 						}
+
+						this.email = "";
+						this.password = "";
 					})
 					.catch((err) => {
 						console.log(err, "Error");
+						this.signInError = true;
+						setTimeout(() => {
+							this.signInError = false;
+						}, 2000);
 					});
 			}
 		},

@@ -1,0 +1,80 @@
+.user-view {
+	background: #fff;
+	padding: 2rem 3rem;
+	box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+		rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+	border-radius: 20px;
+	text-align: center;
+
+	&__welcome {
+		border-bottom: 1px solid $grey;
+
+		h1 {
+			font-size: 3rem;
+			font-family: "Dancing Script", cursive;
+			line-height: 40px;
+			font-weight: bold;
+
+			span {
+				font-family: "Montserrat", sans-serif;
+				font-size: 2rem;
+			}
+		}
+
+		p {
+			margin: 2.5rem 0;
+			font-size: 3rem;
+			font-family: "Dancing Script", cursive;
+			line-height: 40px;
+			font-weight: bold;
+
+			@include screen-md {
+				margin: 1.5rem 0;
+			}
+
+			span {
+				font-family: "Montserrat", sans-serif;
+				font-size: 2rem;
+			}
+		}
+
+		.btn-logout {
+			margin-bottom: 2rem;
+
+			@include screen-md {
+				margin: 0;
+			}
+		}
+	}
+
+	.transactions {
+		margin-top: 2rem;
+		h2 {
+			font-size: 1.3rem;
+			font-weight: bold;
+			margin-bottom: 2rem;
+		}
+
+		&-list {
+			background-color: #484d6d;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 2rem;
+			padding: 2rem 0;
+			border-radius: 10px;
+
+			&__item {
+				background-color: #f4f4f4;
+				width: 90%;
+				padding: 0.5rem 0;
+				border-radius: 10px;
+
+				@include screen-md {
+					width: 70%;
+				}
+			}
+		}
+	}
+}
