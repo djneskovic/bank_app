@@ -13,10 +13,15 @@ export const useAuthStore = defineStore("authStore", {
 			errorMsg: false,
 			signInError: false,
 			userId: null,
-			token: null,
+			token: localStorage.getItem("accessToken") || null,
+			refreshToken: localStorage.getItem("refreshToken") || null,
 			successfull: false,
 			userExist: false,
 			users: [],
+			user: null,
+			///////////////////////////
+			loanAmount: "",
+			loanMessage: false,
 		};
 	},
 
@@ -25,16 +30,13 @@ export const useAuthStore = defineStore("authStore", {
 			this.signUpWindow = true;
 		},
 
-		setUser(data) {
-			this.userId = data.userId;
-			this.token = data.token;
-		},
-
 		initializeUsers() {
 			const storedUsers =
 				JSON.parse(localStorage.getItem("users")) || [];
 			this.users = storedUsers;
 		},
+
+		///////////////////////////////////////////////////////////////////
 
 		signUp() {
 			if (
@@ -60,15 +62,21 @@ export const useAuthStore = defineStore("authStore", {
 					.then((res) => {
 						const data = res.data;
 
+						console.log(data);
+
 						const newUser = {
 							id: Math.floor(Math.random() * 10000),
+							token: data.idToken,
 							email: this.email,
 							password: this.password,
 							username: this.username,
 							amount: this.amount,
+							transaction: [],
 						};
 
 						this.users.push(newUser);
+
+						console.log(this.users);
 
 						localStorage.setItem(
 							"users",
@@ -115,6 +123,18 @@ export const useAuthStore = defineStore("authStore", {
 						const data = res.data;
 						console.log(data);
 
+						const newUser = {
+							id: Math.floor(Math.random() * 10000),
+							token: data.idToken,
+							email: this.email,
+							password: this.password,
+							username: this.username,
+							amount: this.amount,
+							transaction: [],
+						};
+
+						this.users.push(newUser);
+
 						const storedUsers = JSON.parse(
 							localStorage.getItem("users") || []
 						);
@@ -145,6 +165,103 @@ export const useAuthStore = defineStore("authStore", {
 							this.signInError = false;
 						}, 2000);
 					});
+			}
+		},
+
+		logout() {
+			this.user = null;
+			router.replace("/login");
+		},
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		loanMoney() {
+			if (!this.loanAmount || !this.user) return;
+
+			const newAmount =
+				parseFloat(this.user.amount) + parseFloat(this.loanAmount);
+
+			const transaction = {
+				datetime: new Date().toLocaleDateString(), // Get current date and time
+				amount: parseFloat(this.loanAmount),
+			};
+
+			this.user.transaction.unshift(transaction);
+
+			this.user.amount = newAmount.toFixed(1);
+			const storedUsers =
+				JSON.parse(localStorage.getItem("users")) || [];
+			const userIndex = storedUsers.findIndex(
+				(user) => user.token === this.user.token
+			);
+			if (userIndex !== -1) {
+				storedUsers[userIndex].amount = newAmount.toFixed(2);
+				storedUsers[userIndex].transaction.unshift(transaction);
+				localStorage.setItem("users", JSON.stringify(storedUsers));
+			}
+
+			this.loanMessage = true;
+
+			setTimeout(() => {
+				this.loanMessage = false;
+			}, 2000);
+
+			this.loanAmount = "";
+		},
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		deleteAccount() {
+			if (!this.email || !this.email.includes("@") || !this.password) {
+				console.log(this.email);
+				console.log(this.password);
+				this.errorMsg = true;
+				setTimeout(() => {
+					this.errorMsg = false;
+				}, 2000);
+			} else {
+				axios.post(
+					"https://identitytoolkit.googleapis.com/v1/accounts:delete?key=AIzaSyCqwwPG8jzyInCMUSS1caob5Ogkx6Zb7N8",
+					{
+						idToken: this.user.token,
+					}
+				).then((res) => {
+					const data = res.data;
+					console.log(data);
+
+					const storedUsers =
+						JSON.parse(localStorage.getItem("users")) || [];
+					const userIndex = storedUsers.findIndex(
+						(user) => user.token === this.user.token
+					);
+					if (userIndex !== -1) {
+						storedUsers.splice(userIndex, 1);
+						localStorage.setItem(
+							"users",
+							JSON.stringify(storedUsers)
+						);
+					}
+
+					this.email = "";
+					this.password = "";
+
+					router.replace("/login");
+				});
+			}
+		},
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		getUserInfo(username) {
+			const storedUsers =
+				JSON.parse(localStorage.getItem("users")) || [];
+
+			const matchedUser = storedUsers.find(
+				(user) => user.username === username
+			);
+
+			if (matchedUser) {
+				this.user = matchedUser;
 			}
 		},
 	},

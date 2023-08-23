@@ -10,17 +10,29 @@ html {
 
 body {
   min-height: 100vh;
-  background: #abc4ad;
+  background: url("/images/bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center center;
   color: #212121;
   font-family: "Montserrat", sans-serif;
   display: flex;
   justify-content: center;
-  align-items: center; }
+  align-items: center;
+  position: relative; }
+  body::before {
+    position: absolute;
+    content: "";
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: -1; }
 
 .container {
   max-width: 1300px;
   margin: 0 auto;
-  padding: 0 2rem; }
+  padding: 0 2rem;
+  overflow: hidden; }
 
 img {
   width: 100%;
@@ -116,9 +128,14 @@ input[type="number"] {
     .payments .transfer h2,
     .payments .loan h2,
     .payments .delete h2 {
-      font-size: 1.7rem;
+      font-size: 1.4rem;
       font-weight: bold;
       margin-bottom: 1rem; }
+      @media screen and (min-width: 780px) {
+        .payments .transfer h2,
+        .payments .loan h2,
+        .payments .delete h2 {
+          font-size: 1.7rem; } }
     .payments .transfer-inputs,
     .payments .loan-inputs,
     .payments .delete-inputs {
@@ -144,6 +161,21 @@ input[type="number"] {
   .payments .delete {
     background: #ee6352;
     margin-bottom: 2rem; }
+
+.loanMessage {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  background: #727d71;
+  color: #fff;
+  z-index: 9999;
+  padding: 1rem 1rem;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  font-size: 1.3rem; }
 
 .login {
   background: #fff;
@@ -240,11 +272,14 @@ input[type="number"] {
       background-color: #484d6d;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       gap: 2rem;
       padding: 2rem 0;
-      border-radius: 10px; }
+      border-radius: 10px;
+      max-height: 300px;
+      /* Adjust this value as needed */
+      overflow-y: scroll; }
       .user-view .transactions-list__item {
         background-color: #f4f4f4;
         width: 90%;

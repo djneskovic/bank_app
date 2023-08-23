@@ -60,11 +60,13 @@
 			background-color: #484d6d;
 			display: flex;
 			flex-direction: column;
-			justify-content: center;
+			justify-content: flex-start;
 			align-items: center;
 			gap: 2rem;
 			padding: 2rem 0;
 			border-radius: 10px;
+			max-height: 300px; /* Adjust this value as needed */
+			overflow-y: scroll;
 
 			&__item {
 				background-color: #f4f4f4;
