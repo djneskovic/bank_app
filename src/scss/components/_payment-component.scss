@@ -4,7 +4,9 @@
 	.transfer,
 	.loan,
 	.delete {
-		background-color: #48e5c2;
+		background-color: #85ffbd;
+		background-image: linear-gradient(135deg, #85ffbd 0%, #fffb7d 100%);
+
 		padding: 1rem 0;
 		margin-top: 2rem;
 		border-radius: 10px;
@@ -40,11 +42,14 @@
 	}
 
 	.loan {
-		background: #f3d3bd;
+		background-color: #fbab7e;
+		background-image: linear-gradient(213deg, #fbab7e 0%, #f7ce68 100%);
 	}
 
 	.delete {
-		background: #ee6352;
+		background-color: #ffe53b;
+		background-image: linear-gradient(286deg, #ffe53b 0%, #ff2525 74%);
+
 		margin-bottom: 2rem;
 	}
 }

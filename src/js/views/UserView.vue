@@ -31,8 +31,10 @@
 						v-for="transaction in authStore.user.transaction"
 						:key="transaction"
 					>
-						<p>{{ transaction.datetime }}</p>
-						<p>{{ transaction.amount }}$</p>
+						<p class="italic text-sm">
+							{{ transaction.datetime }}
+						</p>
+						<p class="font-bold">{{ transaction.amount }}$</p>
 
 						<!-- POGLEDAJ DOBRO -->
 					</li>

@@ -5,10 +5,18 @@
 			<div
 				class="transfer-inputs md:flex md:items-center md:justify-center md:gap-4"
 			>
-				<input type="text" placeholder="Enter username" />
-				<input type="number" placeholder="Amount" />
+				<input
+					type="text"
+					placeholder="Enter username"
+					v-model="authStore.username"
+				/>
+				<input
+					type="number"
+					placeholder="Amount"
+					v-model="authStore.amount"
+				/>
 			</div>
-			<button class="btn">Send</button>
+			<button class="btn" @click="transferMoney()">Send</button>
 		</div>
 		<div class="loan">
 			<h2>Loan</h2>
@@ -48,7 +56,13 @@
 		class="loanMessage animate__animated animate__backInUp animate__faster"
 		v-if="authStore.loanMessage"
 	>
-		Loan was successfull!
+		Loan was successful!
+	</p>
+	<p
+		class="loanMessage animate__animated animate__backInUp animate__faster"
+		v-if="authStore.transferMessage"
+	>
+		Transfer was successful!
 	</p>
 </template>
 
@@ -56,6 +70,10 @@
 import { useAuthStore } from "../../stores/AuthStore";
 
 const authStore = useAuthStore();
+
+function transferMoney() {
+	authStore.transferMoney(authStore.username, authStore.amount);
+}
 
 function loanMoney() {
 	authStore.loanMoney();

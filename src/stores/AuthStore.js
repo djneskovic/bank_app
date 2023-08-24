@@ -22,6 +22,8 @@ export const useAuthStore = defineStore("authStore", {
 			///////////////////////////
 			loanAmount: "",
 			loanMessage: false,
+			///////////////////////////
+			transferMessage: false,
 		};
 	},
 
@@ -173,6 +175,81 @@ export const useAuthStore = defineStore("authStore", {
 			router.replace("/login");
 		},
 
+		//////////////////////////////////////////////////////////////////////////////////
+
+		transferMoney(username, amount) {
+			const senderUser = this.user;
+
+			if (!senderUser || !username || !amount) return;
+
+			const storedUsers =
+				JSON.parse(localStorage.getItem("users")) || [];
+			const receiverUser = storedUsers.find(
+				(user) => user.username === username
+			);
+
+			if (!receiverUser) {
+				console.log("Receiver user not found");
+				return;
+			}
+
+			const transferAmount = parseFloat(amount);
+
+			if (isNaN(transferAmount) || transferAmount <= 0) {
+				console.log("Invalid transfer amount");
+				return;
+			}
+
+			if (transferAmount > senderUser.amount) {
+				console.log("Insufficient funds");
+				return;
+			}
+
+			senderUser.amount = (
+				parseFloat(senderUser.amount) - transferAmount
+			).toFixed(2);
+			receiverUser.amount = (
+				parseFloat(receiverUser.amount) + transferAmount
+			).toFixed(2);
+
+			const transactionSender = {
+				datetime: new Date().toLocaleDateString(),
+				amount: -transferAmount,
+			};
+			const transactionReceiver = {
+				datetime: new Date().toLocaleDateString(),
+				amount: "+" + transferAmount,
+			};
+
+			senderUser.transaction.unshift(transactionSender);
+			receiverUser.transaction.unshift(transactionReceiver);
+
+			const senderIndex = storedUsers.findIndex(
+				(user) => user.token === senderUser.token
+			);
+			if (senderIndex !== -1) {
+				storedUsers[senderIndex] = senderUser;
+			}
+
+			const receiverIndex = storedUsers.findIndex(
+				(user) => user.username === receiverUser.username
+			);
+			if (receiverIndex !== -1) {
+				storedUsers[receiverIndex] = receiverUser;
+			}
+
+			localStorage.setItem("users", JSON.stringify(storedUsers));
+
+			this.transferMessage = true;
+
+			setTimeout(() => {
+				this.transferMessage = false;
+			}, 2000);
+
+			this.username = "";
+			this.amount = "";
+		},
+
 		/////////////////////////////////////////////////////////////////////////////
 
 		loanMoney() {
@@ -182,9 +259,13 @@ export const useAuthStore = defineStore("authStore", {
 				parseFloat(this.user.amount) + parseFloat(this.loanAmount);
 
 			const transaction = {
-				datetime: new Date().toLocaleDateString(), // Get current date and time
+				datetime: new Date().toLocaleDateString(),
 				amount: parseFloat(this.loanAmount),
 			};
+
+			if (transaction.amount > 0) {
+				transaction.amount = "+" + transaction.amount;
+			}
 
 			this.user.transaction.unshift(transaction);
 
