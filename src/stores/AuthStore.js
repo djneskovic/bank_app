@@ -11,6 +11,7 @@ export const useAuthStore = defineStore("authStore", {
 			username: "",
 			amount: "",
 			errorMsg: false,
+			/////////////////////////////
 			signInError: false,
 			userId: null,
 			token: localStorage.getItem("accessToken") || null,
@@ -24,6 +25,8 @@ export const useAuthStore = defineStore("authStore", {
 			loanMessage: false,
 			///////////////////////////
 			transferMessage: false,
+			transferMessageError: false,
+			transferNoFunds: false,
 		};
 	},
 
@@ -32,11 +35,21 @@ export const useAuthStore = defineStore("authStore", {
 			this.signUpWindow = true;
 		},
 
+		closeSignUpWindow() {
+			this.signUpWindow = false;
+			this.email = "";
+			this.password = "";
+			this.amount = "";
+			this.username = "";
+		},
+
 		initializeUsers() {
 			const storedUsers =
 				JSON.parse(localStorage.getItem("users")) || [];
 			this.users = storedUsers;
 		},
+
+		///////////////////////////////////////////////////////////////////
 
 		///////////////////////////////////////////////////////////////////
 
@@ -69,6 +82,7 @@ export const useAuthStore = defineStore("authStore", {
 						const newUser = {
 							id: Math.floor(Math.random() * 10000),
 							token: data.idToken,
+							refreshToken: data.refreshToken,
 							email: this.email,
 							password: this.password,
 							username: this.username,
@@ -105,10 +119,43 @@ export const useAuthStore = defineStore("authStore", {
 			}
 		},
 
+		///////////////////////////////////////////////////////////////////////////////
+		async refreshTokenIfNeeded() {
+			const now = Math.floor(Date.now() / 1000); // Current time in seconds
+
+			if (
+				this.user &&
+				this.user.refreshToken &&
+				this.tokenExpiration <= now
+			) {
+				try {
+					const refreshTokenResponse = await axios.post(
+						"https://securetoken.googleapis.com/v1/token?key=AIzaSyCqwwPG8jzyInCMUSS1caob5Ogkx6Zb7N8",
+						{
+							grant_type: "refresh_token",
+							refresh_token: this.user.refreshToken,
+						}
+					);
+
+					// Update the stored access token and its expiration time
+					this.token = refreshTokenResponse.data.id_token;
+					this.tokenExpiration =
+						now + refreshTokenResponse.data.expires_in;
+
+					// Update localStorage if needed
+					localStorage.setItem("accessToken", this.token);
+
+					// Continue making authorized requests with the new access token
+				} catch (error) {
+					console.error("Error refreshing access token:", error);
+					// Handle error
+				}
+			}
+		},
+		///////////////////////////////////////////////////////////////////////////////
+
 		signIn() {
 			if (!this.email || !this.email.includes("@") || !this.password) {
-				console.log(this.email);
-				console.log(this.password);
 				this.signInError = true;
 				setTimeout(() => {
 					this.signInError = false;
@@ -128,6 +175,7 @@ export const useAuthStore = defineStore("authStore", {
 						const newUser = {
 							id: Math.floor(Math.random() * 10000),
 							token: data.idToken,
+							refreshToken: data.refreshToken, // Save the refresh token
 							email: this.email,
 							password: this.password,
 							username: this.username,
@@ -148,6 +196,16 @@ export const useAuthStore = defineStore("authStore", {
 						);
 
 						if (matchedUser) {
+							this.user = matchedUser; // Set the user in the store
+
+							this.refreshTokenIfNeeded(); // Refresh the token if needed
+
+							matchedUser.token = data.idToken;
+							localStorage.setItem(
+								"users",
+								JSON.stringify(storedUsers)
+							);
+
 							// Navigate to the user route and pass the user's ID as a parameter
 							router.push({
 								name: "user",
@@ -177,6 +235,8 @@ export const useAuthStore = defineStore("authStore", {
 
 		//////////////////////////////////////////////////////////////////////////////////
 
+		//////////////////////////////////////////////////////////////////////////////////
+
 		transferMoney(username, amount) {
 			const senderUser = this.user;
 
@@ -189,7 +249,12 @@ export const useAuthStore = defineStore("authStore", {
 			);
 
 			if (!receiverUser) {
-				console.log("Receiver user not found");
+				this.transferMessageError = true;
+				setTimeout(() => {
+					this.transferMessageError = false;
+				}, 2000);
+				this.username = "";
+				this.amount = "";
 				return;
 			}
 
@@ -201,7 +266,10 @@ export const useAuthStore = defineStore("authStore", {
 			}
 
 			if (transferAmount > senderUser.amount) {
-				console.log("Insufficient funds");
+				this.transferNoFunds = true;
+				setTimeout(() => {
+					this.transferNoFunds = false;
+				}, 2000);
 				return;
 			}
 
@@ -290,7 +358,7 @@ export const useAuthStore = defineStore("authStore", {
 			this.loanAmount = "";
 		},
 
-		/////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////
 
 		deleteAccount() {
 			if (!this.email || !this.email.includes("@") || !this.password) {

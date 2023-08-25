@@ -7,6 +7,12 @@
 				<div
 					class="sign-up_content flex flex-col items-center justify-center"
 				>
+					<button
+						class="closeWindow"
+						@click="authStore.closeSignUpWindow()"
+					>
+						X
+					</button>
 					<h1 class="mb-8">Please Sign Up to continue</h1>
 
 					<input
