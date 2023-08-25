@@ -368,7 +368,10 @@ export const useAuthStore = defineStore("authStore", {
 				setTimeout(() => {
 					this.errorMsg = false;
 				}, 2000);
-			} else {
+			} else if (
+				this.email === this.user.email &&
+				this.password === this.user.password
+			) {
 				axios.post(
 					"https://identitytoolkit.googleapis.com/v1/accounts:delete?key=AIzaSyCqwwPG8jzyInCMUSS1caob5Ogkx6Zb7N8",
 					{
@@ -396,6 +399,8 @@ export const useAuthStore = defineStore("authStore", {
 
 					router.replace("/login");
 				});
+			} else {
+				console.log("Wrong user");
 			}
 		},
 
